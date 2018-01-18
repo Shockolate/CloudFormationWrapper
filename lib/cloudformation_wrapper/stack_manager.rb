@@ -88,7 +88,7 @@ module CloudFormationWrapper
         puts "Stack failed to update: #{updated_stack.stack_status} (#{updated_stack.stack_status_reason})"
         return false
       end
-      true
+      return_outputs(updated_stack)
     end
 
     def construct_template_parameters(parameters)
@@ -222,6 +222,28 @@ module CloudFormationWrapper
         break if no_new_events || !response.next_token
       end
       events
+    end
+
+    def return_outputs(stack)
+      return if stack.outputs.empty?
+
+      output_name_width = 30
+      output_value_width = 50
+
+      outputs = {}
+
+      puts '   '
+      puts "#{'Output Name'.ljust(output_name_width)} " \
+        "#{'Value'.ljust(output_value_width)} "
+      puts "#{'-',center(output_name_width, '-')} #{'-'.center(output_value_width, '-')}"
+      
+      stack.outputs.each do |output|
+        outputs[output.output_key.to_sym] = output.output_value
+        puts "#{output.output_key.ljust(output_name_width)} #{output.output_value.ljust(output_value_width)}"
+      end
+
+      puts '   '
+      outputs
     end
   end
 end
