@@ -1,0 +1,34 @@
+LineLength:
+  Enabled: true
+  Max: 120
+BlockLength:
+  Enabled: false
+MethodLength:
+  Enabled: true
+  Max: 50
+ClassLength:
+  Enabled: true
+  Max: 300
+  Exclude:
+    - 'test/**/*'
+AbcSize:
+  Enabled: false
+CyclomaticComplexity:
+  Enabled: true
+  Max: 15
+PerceivedComplexity:
+  Enabled: false
+RegexpLiteral:
+  Enabled: false
+  EnforcedStyle: slashes
+  SupportedStyles: slashes
+CyclomaticComplexity:
+  Enabled: true
+  Max: 20
+AllCops:
+  TargetRubyVersion: 2.1
+  Include:
+    - 'lib/**/*.rb'
+  Exclude:
+    - 'Rakefile'
+    - 'Gemfile'

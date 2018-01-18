@@ -8,22 +8,21 @@ ROOT = File.dirname(__FILE__)
 REPORTS_DIR = File.join(ROOT, 'reports')
 DOC_DIR = File.join(ROOT, 'doc')
 
-
 CLEAN.include('*.gem')
 CLEAN.include(REPORTS_DIR)
 CLEAN.include(DOC_DIR)
 
 desc 'Builds the Gem.'
-task :build => [:clean, :lint, :create]
+task build: %i[clean lint create]
 
-task :commit_job => [:clean, :lint, :create]
+task commit_job: %i[clean lint create]
 
 desc 'Runs RuboCop'
 task :lint do
   puts `rubocop -a -F`
 end
 
-task :create => [:clean] do
+task create: [:clean] do
   puts "Creating Gem: #{CloudFormationWrapper::Version}"
   puts `gem build cloudformation_wrapper.gemspec`
 end
