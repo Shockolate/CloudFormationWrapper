@@ -23,7 +23,7 @@ task :lint do
 end
 
 task create: [:clean] do
-  puts "Creating Gem: #{CloudFormationWrapper::Version}"
+  puts "Creating Gem: #{CloudFormationWrapper::VERSION}"
   puts `gem build cloudformation_wrapper.gemspec`
 end
 
