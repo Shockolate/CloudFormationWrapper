@@ -49,7 +49,7 @@ module CloudFormationWrapper
         raise ArgumentError, 'parameters must be provided (Hash)'
       end
 
-      unless options_with_defaults[:client] && (options_with_defaults[:client].is_a? Aws::CloudFormation::Client)
+      unless !options_with_defaults[:client].nil? && (options_with_defaults[:client].is_a? Aws::CloudFormation::Client)
         raise ArgumentError, 'If you\'re providing a client, it must be an Aws::CloudFormation::Client.'
       end
 
