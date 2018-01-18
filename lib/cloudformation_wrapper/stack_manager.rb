@@ -19,11 +19,7 @@ module CloudFormationWrapper
 
       verified_options = verify_options(options)
 
-      cf_client = if verified_options[:client].nil?
-                    Aws::CloudFormation::Client.new(credentials: credentials, region: region)
-                  else
-                    verified_options[:client]
-                  end
+      cf_client = verified_options[:client] || Aws::CloudFormation::Client.new(credentials: credentials, region: region)
 
       ensure_template_file_exists(verified_options[:template_path], cf_client)
 
@@ -51,7 +47,7 @@ module CloudFormationWrapper
         raise ArgumentError, 'parameters must be provided (Hash)'
       end
 
-      return if options_with_defaults[:name] && (options_with_defaults[:name].is_a? String)
+      return options_with_defaults if options_with_defaults[:name] && (options_with_defaults[:name].is_a? String)
       raise ArgumentError, 'name must be provided (String)'
     end
 
