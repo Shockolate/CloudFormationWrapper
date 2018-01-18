@@ -19,11 +19,15 @@ module CloudFormationWrapper
 
       verified_options = verify_options(options)
 
-      cf_client = if verified_options.key?(:client)
-                    Aws::CloudFormation::Client.new(credentials: credentials, region: region)
-                  else
-                    verified_options[:client]
-                  end
+      if verified_options.key?('client')
+        puts 'cf string key'
+        cf_client = verified_options[:client]
+      elif verified_options.key?(:client)
+        puts 'cf symbol key'
+        cf_client = verified_options[:client]
+      else
+        cf_client = Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+      end
 
       puts "CF Client #{cf_client.is_a? Aws::CloudFormation::Client}"
 
