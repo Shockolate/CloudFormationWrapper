@@ -22,7 +22,7 @@ module CloudFormationWrapper
       if verified_options.key?('client')
         puts 'cf string key'
         cf_client = verified_options[:client]
-      elif verified_options.key?(:client)
+      elsif verified_options.key?(:client)
         puts 'cf symbol key'
         cf_client = verified_options[:client]
       else
