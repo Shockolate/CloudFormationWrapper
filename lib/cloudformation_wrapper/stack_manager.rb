@@ -20,16 +20,12 @@ module CloudFormationWrapper
       verified_options = verify_options(options)
 
       if verified_options.key?('client')
-        puts 'cf string key'
         cf_client = verified_options[:client]
       elsif verified_options.key?(:client)
-        puts 'cf symbol key'
         cf_client = verified_options[:client]
       else
         cf_client = Aws::CloudFormation::Client.new(credentials: credentials, region: region)
       end
-
-      puts "CF Client #{cf_client.is_a? Aws::CloudFormation::Client}"
 
       ensure_template_file_exists(verified_options[:template_path], cf_client)
 
@@ -37,7 +33,6 @@ module CloudFormationWrapper
         verified_options[:parameters],
         verified_options[:name],
         verified_options[:template_path],
-        verified_options[:wait_for_stack],
         cf_client
       )
     end
@@ -67,7 +62,7 @@ module CloudFormationWrapper
       puts 'Valid Template File.'
     end
 
-    def self.deploy_stack(parameters, stack_name, template_path, cf_client, _wait)
+    def self.deploy_stack(parameters, stack_name, template_path, cf_client)
       template_parameters = construct_template_parameters(parameters)
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
       old_stack = describe_stack(stack_name, cf_client)
