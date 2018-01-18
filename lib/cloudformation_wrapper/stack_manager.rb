@@ -19,7 +19,11 @@ module CloudFormationWrapper
 
       verified_options = verify_options(options)
 
-      cf_client = verified_options[:client] || Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+      cf_client = if verified_options[:client].nil?
+                    Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+                  else
+                    verified_options[:client]
+                  end
 
       ensure_template_file_exists(verified_options[:template_path], cf_client)
 
