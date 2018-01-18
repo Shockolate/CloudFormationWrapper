@@ -16,6 +16,8 @@ CLEAN.include(DOC_DIR)
 desc 'Builds the Gem.'
 task :build => [:clean, :lint, :create]
 
+task :commit_job => [:clean, :lint, :create]
+
 desc 'Runs RuboCop'
 task :lint do
   puts `rubocop -a -F`
