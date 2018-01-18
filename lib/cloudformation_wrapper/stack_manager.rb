@@ -3,7 +3,7 @@ module CloudFormationWrapper
   # Class containing static convenience methods for deploying and managing CloudFormation Stacks.
   # @since 1.0
   class StackManager
-    def self.deploy(options)
+    def self.self.deploy(options)
       unless options[:client]
         access_key_id = options[:access_key_id] || ENV['AWS_ACCESS_KEY_ID'] || ENV['ACCESS_KEY'] ||
                         raise(ArgumentError, 'Cannot find AWS Access Key ID.')
@@ -34,7 +34,7 @@ module CloudFormationWrapper
 
     private
 
-    def verify_options(options)
+    def self.verify_options(options)
       defaults = {
         description: 'Deployed with CloudFormation Wrapper.', parameters: {}, wait_for_stack: true
       }
@@ -57,13 +57,13 @@ module CloudFormationWrapper
       raise ArgumentError, 'name must be provided (String)'
     end
 
-    def ensure_template_file_exists(template_path, cf_client)
+    def self.ensure_template_file_exists(template_path, cf_client)
       raise ArgumentError, 'CF Template File does not exist.' unless File.file?(template_path)
       cf_client.validate_template(template_body: File.read(template_path))
       puts 'Valid Template File.'
     end
 
-    def deploy_stack(parameters, stack_name, template_path, cf_client, _wait)
+    def self.deploy_stack(parameters, stack_name, template_path, cf_client, _wait)
       template_parameters = construct_template_parameters(parameters)
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
       old_stack = describe_stack(stack_name, cf_client)
@@ -100,7 +100,7 @@ module CloudFormationWrapper
       return_outputs(updated_stack)
     end
 
-    def construct_template_parameters(parameters)
+    def self.construct_template_parameters(parameters)
       template_parameters = []
       parameters.each do |k, v|
         template_parameters.push(
@@ -111,7 +111,7 @@ module CloudFormationWrapper
       template_parameters
     end
 
-    def describe_stack(stack_name, cf_client)
+    def self.describe_stack(stack_name, cf_client)
       response = cf_client.describe_stacks(stack_name: stack_name)
       return false if response.stacks.length != 1
       return response.stacks[0]
@@ -119,7 +119,7 @@ module CloudFormationWrapper
       return false
     end
 
-    def wait_for_stack_change_set_creation(change_set_id, cf_client)
+    def self.wait_for_stack_change_set_creation(change_set_id, cf_client)
       polling_period = 1 # second
 
       puts "Waiting for the Change Set (#{change_set_id}) to be reviewed..."
@@ -139,7 +139,7 @@ module CloudFormationWrapper
       end
     end
 
-    def list_changes(change_set_id, cf_client)
+    def self.list_changes(change_set_id, cf_client)
       response = cf_client.describe_change_set(change_set_name: change_set_id)
       puts
       puts 'Stack Set Changes:'
@@ -163,7 +163,7 @@ module CloudFormationWrapper
       puts
     end
 
-    def execute_change_set(change_set_id, cf_client)
+    def self.execute_change_set(change_set_id, cf_client)
       puts 'Executing Change Set...'
 
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
@@ -171,7 +171,7 @@ module CloudFormationWrapper
       cf_client.execute_change_set(change_set_name: change_set_id, client_request_token: client_token)
     end
 
-    def wait_for_stack_to_complete(stack_name, minimum_timestamp_for_events, cf_client)
+    def self.wait_for_stack_to_complete(stack_name, minimum_timestamp_for_events, cf_client)
       timestamp_width = 30
       logical_resource_width = 40
       resource_status_width = 40
@@ -207,7 +207,7 @@ module CloudFormationWrapper
       stack
     end
 
-    def get_latest_events(stack_name, minimum_timestamp_for_events, most_recent_event_id, cf_client)
+    def self.get_latest_events(stack_name, minimum_timestamp_for_events, most_recent_event_id, cf_client)
       no_new_events = false
       response = nil
       events = []
@@ -233,7 +233,7 @@ module CloudFormationWrapper
       events
     end
 
-    def return_outputs(stack)
+    def self.return_outputs(stack)
       return if stack.outputs.empty?
 
       output_name_width = 30
