@@ -22,6 +22,7 @@ gem install cloudformation_wrapper
 ```
 
 ## Using CloudFormationWrapper
+
 Use the static deploy method within the `CloudFormationWrapper::StackManager` to deploy a CloudFormation Stack.
 
 CloudFormationWrapper uses the AWS SDK to manage CloudFormation stacks. Therefore, it utilizes the `Aws::CloudFormation::Client` for integration. You can provide the client yourself, pass in the credentials, or it will try to read them from Environment Variables. See the [Credential Provider Chain](https://docs.aws.amazon.com/sdk-for-ruby/v3/developer-guide/setup-config.html) for more details.
