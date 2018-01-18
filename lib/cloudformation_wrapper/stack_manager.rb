@@ -32,8 +32,6 @@ module CloudFormationWrapper
       )
     end
 
-    private
-
     def self.verify_options(options)
       defaults = {
         description: 'Deployed with CloudFormation Wrapper.', parameters: {}, wait_for_stack: true
@@ -47,10 +45,6 @@ module CloudFormationWrapper
 
       unless options_with_defaults[:parameters] && (options_with_defaults[:parameters].is_a? Hash)
         raise ArgumentError, 'parameters must be provided (Hash)'
-      end
-
-      unless !options_with_defaults[:client].nil? && (options_with_defaults[:client].is_a? Aws::CloudFormation::Client)
-        raise ArgumentError, 'If you\'re providing a client, it must be an Aws::CloudFormation::Client.'
       end
 
       return if options_with_defaults[:name] && (options_with_defaults[:name].is_a? String)
