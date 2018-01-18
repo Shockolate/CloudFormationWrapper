@@ -138,6 +138,11 @@ module CloudFormationWrapper
       end
     end
 
+    def self.delete_change_set(change_set_id, cf_client)
+      puts 'Deleting Change Set'
+      cf_client.delete_change_set(change_set_name: change_set_id)
+    end
+
     def self.list_changes(change_set_id, cf_client)
       response = cf_client.describe_change_set(change_set_name: change_set_id)
       puts
