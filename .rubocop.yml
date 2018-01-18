@@ -31,3 +31,4 @@ AllCops:
   Exclude:
   - 'Rakefile'
   - 'Gemfile'
+  - 'vendor/**'
