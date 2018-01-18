@@ -10,7 +10,7 @@ ClassLength:
   Enabled: true
   Max: 300
   Exclude:
-    - 'test/**/*'
+  - 'test/**/*'
 AbcSize:
   Enabled: false
 CyclomaticComplexity:
@@ -26,9 +26,8 @@ CyclomaticComplexity:
   Enabled: true
   Max: 20
 AllCops:
-  TargetRubyVersion: 2.1
   Include:
-    - 'lib/**/*.rb'
+  - 'lib/**/*.rb'
   Exclude:
-    - 'Rakefile'
-    - 'Gemfile'
+  - 'Rakefile'
+  - 'Gemfile'
