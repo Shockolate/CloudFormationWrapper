@@ -3,7 +3,7 @@ module CloudFormationWrapper
   # Class containing static convenience methods for deploying and managing CloudFormation Stacks.
   # @since 1.0
   class StackManager
-    def self.self.deploy(options)
+    def self.deploy(options)
       unless options[:client]
         access_key_id = options[:access_key_id] || ENV['AWS_ACCESS_KEY_ID'] || ENV['ACCESS_KEY'] ||
                         raise(ArgumentError, 'Cannot find AWS Access Key ID.')
