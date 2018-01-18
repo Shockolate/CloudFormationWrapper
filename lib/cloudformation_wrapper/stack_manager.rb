@@ -21,6 +21,8 @@ module CloudFormationWrapper
 
       cf_client = verified_options[:client] || Aws::CloudFormation::Client.new(credentials: credentials, region: region)
 
+      ensure_template_file_exists(verified_options[:template_path], cf_client)
+
       deploy_stack(
         verified_options[:parameters],
         verified_options[:name],
@@ -53,6 +55,12 @@ module CloudFormationWrapper
 
       return if options_with_defaults[:name] && (options_with_defaults[:name].is_a? String)
       raise ArgumentError, 'name must be provided (String)'
+    end
+
+    def ensure_template_file_exists(template_path, cf_client)
+      raise ArgumentError, 'CF Template File does not exist.' unless File.file?(template_path)
+      cf_client.validate_template(template_body: File.read(template_path))
+      puts 'Valid Template File.'
     end
 
     def deploy_stack(parameters, stack_name, template_path, cf_client, _wait)
@@ -235,8 +243,8 @@ module CloudFormationWrapper
       puts '   '
       puts "#{'Output Name'.ljust(output_name_width)} " \
         "#{'Value'.ljust(output_value_width)} "
-      puts "#{'-',center(output_name_width, '-')} #{'-'.center(output_value_width, '-')}"
-      
+      puts "#{'-'.center(output_name_width, '-')} #{'-'.center(output_value_width, '-')}"
+
       stack.outputs.each do |output|
         outputs[output.output_key.to_sym] = output.output_value
         puts "#{output.output_key.ljust(output_name_width)} #{output.output_value.ljust(output_value_width)}"
