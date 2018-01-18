@@ -1,17 +1,18 @@
 language: ruby
 rvm:
-  - 2.1
-  - 2.2
-  - 2.3
-  - 2.4
+- 2.1
+- 2.2
+- 2.3
+- 2.4
 sudo: false
 cache: bundler
 script: bundle exec rake commit_job --trace
 deploy:
   provider: rubygems
   api_key:
-    secure: zSbrkJK/6pVtjWIxrJ+HuBrffibwoijfpqUX5TkFJ6HGhSze4flOvkm5i5GrRT35m9olhtFU5QX1FD4EOmwCN0Dd0J/eaGxtcIOjb4KhANUSckJzwDsrwzjw8ut9m7MOu29vksRYi3kvY5TGpB/mr3IRG5siCQAH+I2RIpT8DsZkrKae8q507mDk3uvggKgcEOxiICeva0/bJLKrenIrfP+1bUuucCYPaPh3cPkFRj/z80phLJyAgE71yqtsFD0mnj8phNhaK0jw0g7d2Ic6HKKZds08p/3VMjYvFgRsaeqdqAbZcXdH866Zij6I5IuNLHGwZvHcMLPYukFLvXCER1ZRbbXmK0eb5Qt406K7qRN3pXGtcSsSKf7booZ0+JBKk7tR75Xt+BUrLtQs6y91Ugphbf94cv6bsLqpv97xKAAwAAH62IZz2a8h1LZiud3hSrWC4O19MidCdZoALhZrH+5DyFALwIScilKDsl4GsVY5/Bt/Zt+NzuKzYXrwVJo4c10k3ScU2WNFoKe6iJuia7LnpdgLdW28KGCzxZQQ3s0Of5GyheB/yqI5mKmmkg//lPcAlklZ/4UvsdBh5hSPg/7ez3AqAOuJ6dCaMJATZDO4nXxfUaHPm4Hsp4QdwG0FHTsbUMXjRgrjKyQi4IbUCRM42gt5/UMuuYOdv4+uNQY=
+    secure: rCpW6BC+SqI1Lbu1z7v1K4H+Pn5XOIuyrasgQ8eMDLRg9xut+U6FghMQiXf+bbM82/2ZCi+Mk7ok6GtcoaghQgXkwGdoPNYIWO2S4VAIr4Q3B91BtBaH6oOhjUaVOCGw255PDjGCVsn9DOrZLWQwY30SYrJFV/9bPv8n5gv9CUen/HfuusinKwZe66X+zOlqfDL8CrzdpmZDBBYprggrqwCkG9q/VPhU6lTEAS5joU8W4tRRWgp8zen7XHQkBJjmdeTJbY+xqEppBBo0P2FE2Mb/GUc6b36X2WfxnDTtbddFD2oGTrl9ryVB+y6mWXG2cRa5M7eIqf77yUl6qw/RbyylC1wqcuMFYdWFXmhlSj8kqisvAzQYZbcgEDlC5O7j+aLE4qx6SHCzwkZLk10Gmlh/nynTzmiSlJmvLebHP/sU2WnecJEf5Uh8JXUpxxQ+NZsizWNbiIsCsxMSVz/OOofbKntFIkRfPwZCj/3IZpui2J6rQjJsa8gD5vIoAqTcMcPdeiGmwWAy1DnUYeuwD/oPV/PDcKs2octYi6Zo5NCfqwp9HCDAStQQnPRiX2DifBKqeBERLC5uULFXifqV5/uxx6d9qR7qt6VijZKOl0eQCvDRdYLl/9GfILM9lr9igd1ndXDzHf17GMnbyA0EWq8NkjtQe/9loJSHHbzhFas=
+  gem: cloudformation_wrapper
   on:
     tags: true
+    repo: Shockolate/CloudFormationWrapper
     branch: master
-  gem: cloudformation_wrapper
