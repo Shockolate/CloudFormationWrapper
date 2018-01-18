@@ -66,7 +66,8 @@ module CloudFormationWrapper
     def deploy_stack(parameters, stack_name, template_path, cf_client, _wait)
       template_parameters = construct_template_parameters(parameters)
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
-      change_set_type = describe_stack(stack_name, cf_client) ? 'UPDATE' : 'CREATE'
+      old_stack = describe_stack(stack_name, cf_client)
+      change_set_type = old_stack ? 'UPDATE' : 'CREATE'
 
       create_change_set_params = {
         stack_name: stack_name,
@@ -83,7 +84,7 @@ module CloudFormationWrapper
       unless wait_for_stack_change_set_creation(change_set_id, cf_client)
         puts "No changes required for #{stack_name}"
         delete_change_set(change_set_id, cf_client)
-        return nil
+        return return_outputs(old_stack)
       end
 
       list_changes(change_set_id, cf_client)

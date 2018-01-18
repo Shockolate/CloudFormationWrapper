@@ -15,4 +15,5 @@ Gem::Specification.new do |s|
   s.license                 = 'Apache-2.0'
   s.required_ruby_version   = '>= 2.1'
   s.add_runtime_dependency('aws-sdk-cloudformation', '~> 1')
+  s.add_runtime_dependency('activesupport', '~>4')
 end
