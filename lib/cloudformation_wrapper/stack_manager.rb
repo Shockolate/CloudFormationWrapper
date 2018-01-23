@@ -33,13 +33,45 @@ module CloudFormationWrapper
         verified_options[:parameters],
         verified_options[:name],
         verified_options[:template_path],
+        verified_options[:capabilities],
         cf_client
       )
     end
 
+    def self.validate_template(options)
+      unless options[:client]
+        access_key_id = options[:access_key_id] || ENV['AWS_ACCESS_KEY_ID'] || ENV['ACCESS_KEY'] ||
+                        raise(ArgumentError, 'Cannot find AWS Access Key ID.')
+
+        secret_access_key = options[:secret_access_key] || ENV['AWS_SECRET_ACCESS_KEY'] || ENV['SECRET_KEY'] ||
+                            raise(ArgumentError, 'Cannot find AWS Secret Key.')
+
+        credentials = Aws::Credentials.new(access_key_id, secret_access_key)
+      end
+
+      region = options[:region] || ENV['AWS_REGION'] || ENV['AMAZON_REGION'] || ENV['AWS_DEFAULT_REGION'] ||
+               raise(ArgumentError, 'Cannot find AWS Region.')
+
+      unless options[:template_path] && (options[:template_path].is_a? String)
+        raise ArgumentError, 'template_path must be provided (String)'
+      end
+
+      if options.key?('client')
+        cf_client = options[:client]
+      elsif options.key?(:client)
+        cf_client = options[:client]
+      else
+        cf_client = Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+      end
+
+      cf_client.validate_template(template_body: File.read(options[:template_path]))
+    end
+
+
     def self.verify_options(options)
       defaults = {
-        description: 'Deployed with CloudFormation Wrapper.', parameters: {}, wait_for_stack: true
+        description: 'Deployed with CloudFormation Wrapper.', parameters: {}, wait_for_stack: true,
+        capabilities: []
       }
 
       options_with_defaults = options.reverse_merge(defaults)
@@ -62,7 +94,7 @@ module CloudFormationWrapper
       puts 'Valid Template File.'
     end
 
-    def self.deploy_stack(parameters, stack_name, template_path, cf_client)
+    def self.deploy_stack(parameters, stack_name, template_path, capabilties, cf_client)
       template_parameters = construct_template_parameters(parameters)
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
       old_stack = describe_stack(stack_name, cf_client)
@@ -75,7 +107,8 @@ module CloudFormationWrapper
         change_set_name: "ChangeSet-#{client_token}",
         client_token: client_token,
         description: ENV.fetch('BUILD_TAG', 'Stack Updates.'),
-        change_set_type: change_set_type
+        change_set_type: change_set_type,
+        capabilities: capabilities
       }
 
       change_set_id = cf_client.create_change_set(create_change_set_params).id
