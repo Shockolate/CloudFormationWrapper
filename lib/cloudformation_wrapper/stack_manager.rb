@@ -19,13 +19,13 @@ module CloudFormationWrapper
 
       verified_options = verify_options(options)
 
-      if verified_options.key?('client')
-        cf_client = verified_options[:client]
-      elsif verified_options.key?(:client)
-        cf_client = verified_options[:client]
-      else
-        cf_client = Aws::CloudFormation::Client.new(credentials: credentials, region: region)
-      end
+      cf_client = if verified_options.key?('client')
+                    verified_options[:client]
+                  elsif verified_options.key?(:client)
+                    verified_options[:client]
+                  else
+                    Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+                  end
 
       ensure_template_file_exists(verified_options[:template_path], cf_client)
 
@@ -56,17 +56,16 @@ module CloudFormationWrapper
         raise ArgumentError, 'template_path must be provided (String)'
       end
 
-      if options.key?('client')
-        cf_client = options[:client]
-      elsif options.key?(:client)
-        cf_client = options[:client]
-      else
-        cf_client = Aws::CloudFormation::Client.new(credentials: credentials, region: region)
-      end
+      cf_client = if options.key?('client')
+                    options[:client]
+                  elsif options.key?(:client)
+                    options[:client]
+                  else
+                    Aws::CloudFormation::Client.new(credentials: credentials, region: region)
+                  end
 
       cf_client.validate_template(template_body: File.read(options[:template_path]))
     end
-
 
     def self.verify_options(options)
       defaults = {
@@ -94,7 +93,7 @@ module CloudFormationWrapper
       puts 'Valid Template File.'
     end
 
-    def self.deploy_stack(parameters, stack_name, template_path, capabilties, cf_client)
+    def self.deploy_stack(parameters, stack_name, template_path, capabilities, cf_client)
       template_parameters = construct_template_parameters(parameters)
       client_token = ENV.fetch('BUILD_NUMBER', SecureRandom.uuid.delete('-'))
       old_stack = describe_stack(stack_name, cf_client)
